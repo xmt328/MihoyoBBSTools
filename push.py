@@ -451,6 +451,21 @@ class PushHandler:
         else:
             log.error(f"WxPusher 推送失败：{response}")
             return 1
+        
+    def wpush(self, status, push_message):
+        response = self.http.post(
+            url="https://api.wpush.cn/api/v1/send",
+            data={
+                "apikey": self.cfg.get('wpush', 'token'),
+                "title": get_push_title(status),
+                "content": push_message
+            }
+        )
+        if response.json()["code"] == 0:
+            return 0
+        else:
+            log.error(f"wpush 推送失败: {response.json()}")
+            return 1
 
     # 其他推送方法，例如 ftqq, pushplus 等, 和 telegram 方法相似
     # 在类内部直接使用 self.cfg 读取配置
