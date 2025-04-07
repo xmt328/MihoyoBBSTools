@@ -87,7 +87,7 @@ class GameCheckin:
                 self.set_headers()
                 return self.is_sign(region, uid, True)
             log.warning("获取账号签到信息失败！")
-            print(req.text)
+            log.debug(req.text)
             config.config["games"]["cn"][self.game_mid]["auto_checkin"] = False
             config.save_config()
             raise CookieError("BBS Cookie Errror")
