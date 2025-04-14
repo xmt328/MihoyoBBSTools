@@ -10,7 +10,7 @@ if os.path.exists(file_path):
     log = logging.getLogger("AutoMihoyoBBS")
 else:
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='%(asctime)s %(levelname)s %(message)s',
         datefmt='%Y-%m-%dT%H:%M:%S')
     log = logging
