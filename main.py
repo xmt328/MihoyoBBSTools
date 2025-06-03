@@ -7,11 +7,11 @@ import login
 import tools
 import config
 import mihoyobbs
-import competition
 import gamecheckin
 import hoyo_checkin
 import cloudgames
 import os_cloudgames
+import web_activity
 from error import *
 from loghelper import log
 
@@ -39,13 +39,6 @@ def main():
     ret_code = 0
     return_data = "\n"
     raise_stoken = False
-
-    # 升级stoken
-    if config.config["account"]["stoken"] != "" and not login.require_mid():
-        try:
-            login.update_stoken_v2()
-        except StokenError:
-            raise_stoken = True
 
     if config.config["mihoyobbs"]["enable"]:
         if config.config["account"]["stoken"] == "StokenError":
@@ -75,11 +68,9 @@ def main():
     if config.config['cloud_games']['os']["enable"]:
         log.info("正在进行云游戏国际版签到")
         return_data += "\n\n" + os_cloudgames.run_task()
-    if config.config['competition']['enable']:
-        log.info("正在进行米游社竞赛活动签到")
-        competition_result = competition.run_task()
-        if competition_result != '':
-            return_data += "\n\n" + "米游社竞赛活动：" + competition_result
+    if config.config['web_activity']['enable']:
+        log.info("正在进行米游社网页活动任务")
+        web_activity.run_task()
     if raise_stoken:
         raise StokenError("Stoken 异常")
     if "触发验证码" in return_data:
