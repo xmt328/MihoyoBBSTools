@@ -12,6 +12,7 @@ from loghelper import log
 from configparser import ConfigParser, NoOptionError
 
 title = {
+    -99: "「米游社脚本」依赖缺失",
     -2: "「米游社脚本」StatusID 错误",
     -1: "「米游社脚本」Config版本已更新",
     0: "「米游社脚本」执行成功!",
@@ -139,12 +140,24 @@ class PushHandler:
         """
         OneBot V11(CqHttp)协议推送
         """
+        qq = self.cfg.get('cqhttp', 'cqhttp_qq', fallback=None)
+        group = self.cfg.get('cqhttp', 'cqhttp_group', fallback=None)
+
+        if qq and group:
+            log.error("请只填写 cqhttp_qq 或 cqhttp_group 的其中一个，不要同时填写！")
+            return
+
+        data = {
+            "message": get_push_title(status_id) + "\r\n" + push_message
+        }
+        if qq:
+            data["user_id"] = int(qq)
+        if group:
+            data["group_id"] = int(group)
+
         self.http.post(
             url=self.cfg.get('cqhttp', 'cqhttp_url'),
-            json={
-                "user_id": self.cfg.getint('cqhttp', 'cqhttp_qq'),
-                "message": get_push_title(status_id) + "\r\n" + push_message
-            }
+            json=data
         )
 
     # 感谢 @islandwind 提供的随机壁纸api 个人主页：https://space.bilibili.com/7600422
