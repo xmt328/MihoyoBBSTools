@@ -23,6 +23,7 @@ mihoyobbs_List = {
     6: {"id": "6", "forumId": "52", "name": "崩坏：星穹铁道"},
     8: {"id": "8", "forumId": "57", "name": "绝区零"},
     9: {"id": "9", "forumId": "948", "name": "崩坏：因缘精灵"},
+    10: {"id": "10", "forumId": "950", "name": "星布谷地"},
 }
 
 game_id2name = {
