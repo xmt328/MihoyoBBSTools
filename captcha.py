@@ -10,15 +10,24 @@ def captcha(gt: str, challenge: str):
         res = get_pic(gt, challenge)
         datas = json.loads(res.body).get("data", {})
         if datas.get("result") == "success":
-            return datas.get("validate")
+            return adapt(challenge, datas.get("validate"))
     except Exception as e:
         log.exception(f"Error during captcha processing: {e}")
-    return None  # 失败时返回 None
+    return adapt(challenge, None)
 
 
-def game_captcha(gt: str, challenge: str):
+def adapt(challenge: str, validate: str | None) -> dict[str, str] | None:
+    # challenge不要直接用传入的，老格式也还支持，但是建议优先使用新格式
+    # 失败返回None 成功返回{"challenge":challenge,"validate":validate}
+    if validate is None:
+        return None
+    else:
+        return {"challenge": challenge, "validate": validate}
+
+
+def game_captcha(gt: str, challenge: str) -> dict:
     return captcha(gt, challenge)
 
 
-def bbs_captcha(gt: str, challenge: str):
+def bbs_captcha(gt: str, challenge: str) -> dict:
     return captcha(gt, challenge)
